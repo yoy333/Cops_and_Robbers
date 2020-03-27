@@ -81,9 +81,15 @@ function draw(){
 	ctx.fillRect(0, 580, playerA[0].stamina/2, 20)
 }
 
-$(document).on("click",'button#playButton',function(){
-	$('button').remove()
+$(document).on("click", "button#level-1", function(){
+	$('div#levelScreen').hide();
 	play();
+})
+
+$(document).on("click",'button#playButton',function(){
+	$('button').hide()
+	$('div#levelScreen').show()
+	$('div#levelScreen>button').show()
 })
 
 //start code
@@ -91,6 +97,7 @@ $(document).on("click",'button#playButton',function(){
 $(document).ready(function(){
 	$('div#editScreen').hide()
 	$('div#guardMenu').hide()
+	$('div#levelScreen').hide()
 	ctx.fillStyle = "#0000FF"
 	ctx.fillRect(0,0,1000,600)
 })

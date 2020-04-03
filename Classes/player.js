@@ -160,6 +160,7 @@ var Player = function(x,y){
 	this.collect = function(a,b){
 		this.hasGem = true
 		currentLevelA[a][b] = 0
+		
 	}
 	// this.spawn()
 }

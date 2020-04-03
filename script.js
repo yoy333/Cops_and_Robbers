@@ -86,6 +86,12 @@ $(document).on("click", "button#level-1", function(){
 	play();
 })
 
+$(document).on("click", "button#level-2", function(){
+	$('div#levelScreen').hide();
+	level = 2
+	play();
+})
+
 $(document).on("click",'button#playButton',function(){
 	$('button').hide()
 	$('div#levelScreen').show()

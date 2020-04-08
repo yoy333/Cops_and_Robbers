@@ -50,13 +50,13 @@ function classChange(x,y,type){
 			selectedguard = []
 		break;
 		case 'wall':
-			$('div#p_'+x+'_'+y).css('backgroundColor', 'grey');
+			$('div#p_'+x+'_'+y).css('background-image', 'url(img/wall.png)');
 			particleA[y][x] = new Wall();
 			$('div#p_'+x+'_'+y).removeClass('guard')
 			selectedGuard = []
 		break;
 		case 'gem':
-			$('div#p_'+x+'_'+y).css('background-color', 'red')
+			$('div#p_'+x+'_'+y).css('background-image', 'url(img/gem.png)')
 			particleA[y][x] = new Gem();
 			$('div#p_'+x+'_'+y).removeClass('guard')
 			selectedGuard = []

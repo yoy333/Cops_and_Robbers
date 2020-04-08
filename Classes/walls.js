@@ -4,7 +4,7 @@ var Wall = function(){
 	this.color = "#CCCCCC"
 	
 	this.draw = function(x, y, px, py){
-		var img = document.getElementById("wallsImg");
+		var img = document.getElementById("wallImg");
 		ctx.drawImage(img, x-px, y-py);
 	}
 }

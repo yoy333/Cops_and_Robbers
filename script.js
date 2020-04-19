@@ -63,8 +63,14 @@ function play(){
 }
 
 function draw(){
-	ctx.fillStyle = "#0000FF"
-	ctx.fillRect(0, 0, 1000, 600)
+	//ctx.fillStyle = "#CCCCCC"
+	//ctx.fillRect(0, 0, 1000, 600)
+	for(var x = 0; x<40; x++){
+		for(var y = 0; y<20; y++){
+			var backgroundImg = document.getElementById("backgroundImg");
+			ctx.drawImage(backgroundImg, x*50-playerA[0].camera_pos.x, y*50-playerA[0].camera_pos.y);
+		}
+	}
 	ctx.fillStyle = "#FFFFFF"
 	ctx.fillRect(playerA[0].x_pos - playerA[0].camera_pos.x, playerA[0].y_pos - playerA[0].camera_pos.y, 50, 50)
 	for(var i=0; i<currentLevelA.length; i++){

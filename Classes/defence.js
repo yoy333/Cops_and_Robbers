@@ -47,10 +47,11 @@ var Defence = function(){
 			for(var i=-1; i<=1; i++){
 				this.range = 250
 				for(var c=1; c<=5; c++){
-					if(currentLevelA[Math.floor(this.y_pos/50+i)][Math.floor((this.x_pos/50))+c]!=0){
-						if(currentLevelA[Math.floor(this.y_pos/50+i)][Math.floor((this.x_pos/50)+c)].content == 'wall'){
+					this.pos = [Math.floor(this.y_pos/50+i),Math.floor(this.x_pos/50+c)<40?Math.floor(this.y_pos/50+i):39]
+					if(currentLevelA[this.pos[0]][this.pos[1]]!=0){
+						if(currentLevelA[this.pos[0]][this.pos[1]].content == 'wall'){
 							// console.log('short range')
-							this.range = currentLevelA[Math.floor(this.y_pos/50+i)][Math.floor((this.x_pos/50)+c)].x_pos-this.x_pos;
+							this.range = currentLevelA[this.pos[0]][this.pos[1]].x_pos-this.x_pos;
 							break;	
 						}
 					}
@@ -64,10 +65,11 @@ var Defence = function(){
 			for(var i=-1;i<=1;i++){
 				this.range = -250
 				for(var c=0; c<5; c++){
-					if(currentLevelA[Math.floor(this.y_pos/50+i)][Math.floor((this.x_pos/50))-c]!=0){
-						if(currentLevelA[Math.floor(this.y_pos/50+i)][Math.floor((this.x_pos/50)-c)].content == 'wall'){
+					this.pos = [Math.floor(this.y_pos/50+i), Math.floor((this.x_pos/50))-c>0?Math.floor((this.x_pos/50))-c:0]
+					if(currentLevelA[this.pos[0]][this.pos[1]]!=0){
+						if(currentLevelA[this.pos[0]][this.pos[1]].content == 'wall'){
 							// console.log('short range')
-							this.range = currentLevelA[Math.floor(this.y_pos/50+i)][Math.floor((this.x_pos/50)-c)].x_pos-this.x_pos;
+							this.range = currentLevelA[this.pos[0]][this.pos[1]].x_pos-this.x_pos;
 							break;	
 						}
 					}

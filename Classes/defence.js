@@ -1,9 +1,9 @@
 var Defence = function(){
-		this.dir_num = 0
-		this.orientation = []
-		this.orientation = []
+	this.dir_num = 0
+	this.orientation = []
+	this.orientation = []
 	
-		this.walkTo = function(coords){
+	this.walkTo = function(coords){
 		if( Math.abs( coords[0] - this.x_pos ) <= this.patrolspeed){
 			this.x_pos += coords[0] - this.x_pos
 			if(coords[0]-this.x_pos>0){
@@ -39,7 +39,8 @@ var Defence = function(){
 	}
 	
 	this.chase = function(){
-		console.log('I see you!')
+		// console.log('calling Astar')
+		
 	}
 	
 	this.detect = function(){
@@ -47,7 +48,7 @@ var Defence = function(){
 			for(var i=-1; i<=1; i++){
 				this.range = 250
 				for(var c=1; c<=5; c++){
-					this.pos = [Math.floor(this.y_pos/50+i),Math.floor(this.x_pos/50+c)<40?Math.floor(this.y_pos/50+i):39]
+					this.pos = [Math.floor(this.y_pos/50+i),Math.floor(this.x_pos/50+c)<40?Math.floor(this.x_pos/50+c):39]
 					if(currentLevelA[this.pos[0]][this.pos[1]]!=0){
 						if(currentLevelA[this.pos[0]][this.pos[1]].content == 'wall'){
 							// console.log('short range')
@@ -56,8 +57,8 @@ var Defence = function(){
 						}
 					}
 				}
-				if(playerA[0].y_pos >= this.y_pos+(i*50) && playerA[0].y_pos <= (this.y_pos+50)+(i*50) && (playerA[0].x_pos+50) >= this.x_pos && playerA[0].x_pos <= (this.x_pos+this.range)){
-					this.chase()
+				if(playerA[0].y_pos+50 >= this.y_pos+(i*50) && playerA[0].y_pos <= (this.y_pos)+(i*50) && playerA[0].x_pos >= this.x_pos+50 && playerA[0].x_pos <= (this.x_pos+this.range)){
+					return true
 				}
 			}
 		}
@@ -75,18 +76,19 @@ var Defence = function(){
 					}
 				}
 				if(playerA[0].y_pos >= this.y_pos+(i*50) && playerA[0].y_pos <= (this.y_pos+50)+(i*50) && playerA[0].x_pos <= this.x_pos && playerA[0].x_pos >= (this.x_pos+this.range)){
-					this.chase()
+					return true
 				}
 			}
 		}
-		this.orientation = []
-		return true
+		return false
 	}
 	
 	this.run = function(){
+		this.patrol()
 		if(this.detect()){
-			this.patrol()
+			this.chase()
 		}
+		this.orientation = []
 	}
 }
 

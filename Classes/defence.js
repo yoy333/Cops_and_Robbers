@@ -45,7 +45,7 @@ var Defence = function(){
 	this.chase = function(){
 		// console.log('calling Astar')
 		var map = this.getAStarMap()
-		var path = new AStar([Math.floor(this.x_pos/50), Math.floor(this.y_pos/50)], [Math.floor(playerA[0].x_pos/50), Math.floor(playerA[0].y_pos/50)], )
+		//var path = new AStar([Math.floor(this.x_pos/50), Math.floor(this.y_pos/50)], [Math.floor(playerA[0].x_pos/50), Math.floor(playerA[0].y_pos/50)], )
 	}
 	
 	this.detect = function(){

@@ -5,8 +5,7 @@ var Defense = function(){
 	this.found = false
 
 	this.walkTo = function(coords){
-		console.log(this.x_pos/50)
-		console.log(coords[0]/50)
+>>>>>>> master
 		if( Math.abs( coords[0] - this.x_pos ) <= this.patrolspeed){
 			this.x_pos += coords[0] - this.x_pos
 			if(coords[0]-this.x_pos>0){
@@ -36,6 +35,8 @@ var Defense = function(){
 			}else if(coords[1]-this.y_pos<0){
 				this.orientation.push('up')
 			}
+		}else{
+			this.y_pos += ( ( Math.abs(coords[1] - this.y_pos ) ) / ( coords[1] - this.y_pos ) ) * this.patrolspeed
 		}
 	}
 	
@@ -110,7 +111,7 @@ var Defense = function(){
 				}
 				if(this.withinRangeRight(i, range)){
 					this.found = true
-					return true
+]					return true
 				}
 			}
 		}
@@ -123,6 +124,7 @@ var Defense = function(){
 						if(currentLevelA[this.pos[0]][this.pos[1]].content == 'wall'){
 							// console.log('short range')
 							range = currentLevelA[this.pos[0]][this.pos[1]].x_pos-this.x_pos;
+
 							break;	
 						}
 					}
@@ -140,8 +142,7 @@ var Defense = function(){
 			this.chase()
 		}
 		this.orientation = []
-	}
-	
+	}	
 }
 
 Defense.prototype = new Particle()

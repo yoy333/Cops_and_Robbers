@@ -5,7 +5,6 @@ var Defense = function(){
 	this.found = false
 
 	this.walkTo = function(coords){
->>>>>>> master
 		if( Math.abs( coords[0] - this.x_pos ) <= this.patrolspeed){
 			this.x_pos += coords[0] - this.x_pos
 			if(coords[0]-this.x_pos>0){
@@ -35,9 +34,10 @@ var Defense = function(){
 			}else if(coords[1]-this.y_pos<0){
 				this.orientation.push('up')
 			}
-		}else{
-			this.y_pos += ( ( Math.abs(coords[1] - this.y_pos ) ) / ( coords[1] - this.y_pos ) ) * this.patrolspeed
 		}
+		// else{
+			// this.y_pos += ( ( Math.abs(coords[1] - this.y_pos ) ) / ( coords[1] - this.y_pos ) ) * this.patrolspeed
+		// }
 	}
 	
 	this.patrol = function(){
@@ -111,7 +111,7 @@ var Defense = function(){
 				}
 				if(this.withinRangeRight(i, range)){
 					this.found = true
-]					return true
+					return true
 				}
 			}
 		}

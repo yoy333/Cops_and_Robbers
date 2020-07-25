@@ -2,42 +2,47 @@ var Defense = function(){
 	this.dir_num = 0
 	this.orientation = []
 	this.map = []
-	this.found = false
-
+	this.found = true
+	
+	this.setOrientationX = function(x){
+		if(x-this.x_pos>0){
+			this.orientation.push('right')
+		}else if(x-this.x_pos<0){
+			this.orientation.push('left')
+		}
+	}
+	
+	this.setOrientationY = function(y){
+		if(y-this.y_pos>0){
+			this.orientation.push('down')
+		}else if(y-this.y_pos<0){
+			this.orientation.push('up')
+		}
+	}
+	
+	this.walkToXAxis = function(x){
+		if( Math.abs( x - this.x_pos ) <= this.patrolspeed){
+			this.x_pos += x - this.x_pos
+			this.setOrientationX(x)
+		}else{
+			this.x_pos += ( ( Math.abs(x - this.x_pos ) ) / ( x - this.x_pos ) ) * this.patrolspeed
+			this.setOrientationX(x)
+		}
+	}
+	
+	this.walkToYAxis function(y){
+		if( Math.abs( y - this.y_pos ) <= this.patrolspeed){
+			this.y_pos += y - this.y_pos
+			this.setOrientationY(y)
+		}else{
+			this.y_pos += ( ( Math.abs(y - this.y_pos ) ) / ( y - this.y_pos ) ) * this.patrolspeed
+			this.setOrientationY(y)
+		}
+	}
+	
 	this.walkTo = function(coords){
-		if( Math.abs( coords[0] - this.x_pos ) <= this.patrolspeed){
-			this.x_pos += coords[0] - this.x_pos
-			if(coords[0]-this.x_pos>0){
-				this.orientation.push('right')
-			}else if(coords[0]-this.x_pos<0){
-				this.orientation.push('left')
-			}
-		}else{
-			this.x_pos += ( ( Math.abs(coords[0] - this.x_pos ) ) / ( coords[0] - this.x_pos ) ) * this.patrolspeed
-			if(coords[0]-this.x_pos>0){
-				this.orientation.push('right')
-			}else if(coords[0]-this.x_pos<0){
-				this.orientation.push('left')
-			}
-		}
-		if( Math.abs( coords[1] - this.y_pos ) <= this.patrolspeed){
-			this.y_pos += coords[1] - this.y_pos
-			if(coords[1]-this.y_pos>0){
-				this.orientation.push('down')
-			}else if(coords[1]-this.y_pos<0){
-				this.orientation.push('up')
-			}
-		}else{
-			this.y_pos += ( ( Math.abs(coords[1] - this.y_pos ) ) / ( coords[1] - this.y_pos ) ) * this.patrolspeed
-			if(coords[1]-this.y_pos>0){
-				this.orientation.push('down')
-			}else if(coords[1]-this.y_pos<0){
-				this.orientation.push('up')
-			}
-		}
-		// else{
-			// this.y_pos += ( ( Math.abs(coords[1] - this.y_pos ) ) / ( coords[1] - this.y_pos ) ) * this.patrolspeed
-		// }
+		this.walkToXAxis(coords[0])
+		this.walkToYAxis(coords[1])
 	}
 	
 	this.patrol = function(){

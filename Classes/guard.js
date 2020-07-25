@@ -9,6 +9,7 @@ var Guard = function(directions){
 		this.run()
 	}
 	
+	this.getAStarMap
 }
 
-Guard.prototype = new Defence()
+Guard.prototype = new Defense()

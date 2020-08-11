@@ -2,7 +2,7 @@ var Defense = function(){
 	this.dir_num = 0
 	this.orientation = []
 	this.map = []
-	this.found = true
+	this.found = false
 	
 	this.setOrientationX = function(x){
 		if(x-this.x_pos>0){
@@ -30,7 +30,7 @@ var Defense = function(){
 		}
 	}
 	
-	this.walkToYAxis function(y){
+	this.walkToYAxis = function(y){
 		if( Math.abs( y - this.y_pos ) <= this.patrolspeed){
 			this.y_pos += y - this.y_pos
 			this.setOrientationY(y)
@@ -77,7 +77,7 @@ var Defense = function(){
 		this.walkTo([guide[1][0]*50, guide[1][1]*50])
 	}
 	
-	this.withinRangeRight = function(i, range){
+	this.withinPatrolSightRight = function(i, range){
 		// console.log('running')
 		var nodeSize = 50
 
@@ -106,7 +106,12 @@ var Defense = function(){
 			for(var i=-1; i<=1; i++){
 				var range = 250
 				for(var c=1; c<=5; c++){
-					this.pos = [Math.floor(this.y_pos/50+i),Math.floor(this.x_pos/50+c)<40?Math.floor(this.x_pos/50+c):39]
+					var x = Math.floor(this.x_pos/50+c)
+					var y = Math.floor(this.y_pos/50+i)
+					if(x>=40){
+						x=39
+					}
+					this.pos = [y, x]
 					if(currentLevelA[this.pos[0]][this.pos[1]]!=0){
 						if(currentLevelA[this.pos[0]][this.pos[1]].content == 'wall'){
 							range = currentLevelA[this.pos[0]][this.pos[1]].x_pos-this.x_pos;
@@ -114,7 +119,8 @@ var Defense = function(){
 						}
 					}
 				}
-				if(this.withinRangeRight(i, range)){
+				console.log(range)
+				if(this.withinPatrolSightRight(i, range)){
 					this.found = true
 					return true
 				}
@@ -124,7 +130,7 @@ var Defense = function(){
 			for(var i=-1;i<=1;i++){
 				range = -250
 				for(var c=0; c<5; c++){
-					this.pos = [Math.floor(this.y_pos/50+i), Math.floor((this.x_pos/50))-c>0?Math.floor((this.x_pos/50))-c:0]
+					this.pos = [Math.floor(this.y_pos/50+i),					Math.floor((this.x_pos/50))-c>0?Math.floor((this.x_pos/50))-c:0]
 					if(currentLevelA[this.pos[0]][this.pos[1]]!=0){
 						if(currentLevelA[this.pos[0]][this.pos[1]].content == 'wall'){
 							// console.log('short range')
@@ -141,12 +147,13 @@ var Defense = function(){
 	}
 	
 	this.run = function(){
-		this.patrol()
 		this.detect()
+		this.orientation = []
 		if(this.found){
 			this.chase()
+		}else{
+			this.patrol()
 		}
-		this.orientation = []
 	}	
 }
 

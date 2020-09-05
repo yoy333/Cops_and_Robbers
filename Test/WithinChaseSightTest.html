@@ -2,5 +2,19 @@
 <head>
 </head>
 <body>
-	<script type="text/javascript" src="Classes/Defense.js"></script>
+	<script>
+		var obj = {
+			x_pos:150,
+			y_pos:150
+		}
+		playerA = [obj]
+	</script>
+	<script type="text/javascript" src="../Classes/Particle.js"></script>
+	<script type="text/javascript" src="../Classes/Defense.js"></script>
+	<script>
+		var d = new Defense()
+		d.x_pos = 100
+		d.y_pos = 100
+		console.log(d.WithinChaseSight(70))
+	</script>
 </body>

@@ -3,10 +3,12 @@ var Defense = function(){
 	this.orientation = []
 	this.map = []
 	this.found = false
+	this.patrolspeed = 3
+	this.lastFoundPos = []
 	
 	this.setOrientationX = function(x){
 		if(x-this.x_pos>0){
-			this.orientation.push('right')
+			
 		}else if(x-this.x_pos<0){
 			this.orientation.push('left')
 		}
@@ -21,22 +23,73 @@ var Defense = function(){
 	}
 	
 	this.walkToXAxis = function(x){
-		if( Math.abs( x - this.x_pos ) <= this.patrolspeed){
-			this.x_pos += x - this.x_pos
-			this.setOrientationX(x)
+		var dx = x-this.x_pos
+		var dy = this.y_pos
+		dx = Math.abs(dx)<=this.patrolspeed?dx:this.patrolspeed*(dx/Math.abs(dx))
+		var col = Math.floor(this.y_pos/50)
+		var row = Math.floor(this.x_pos/50)
+		var row_move = Math.floor((this.x_pos+dx)/50)
+		var col_move = Math.floor((this.y_pos+dy)/50)
+		var col_c = Math.ceil(this.y_pos/50)
+		var row_c = Math.ceil(this.x_pos/50)
+		var row_move_c = Math.ceil((this.x_pos+dx)/50)
+		var col_move_c = Math.ceil((this.y_pos+dy)/50)
+		if(dx>0){
+			if(currentLevelA[col][row_move_c].collision!=true
+			&& currentLevelA[col_c][row_move_c].collision!=true){
+				
+				this.x_pos += dx
+				
+			}else{
+				// console.log('collision!')
+				console.log([row_move_c])
+				this.x_pos = ((row_c)*50)
+			}
+			this.orientation.push('right')
 		}else{
-			this.x_pos += ( ( Math.abs(x - this.x_pos ) ) / ( x - this.x_pos ) ) * this.patrolspeed
-			this.setOrientationX(x)
+			if(currentLevelA[col][row_move].collision!=true
+			&& currentLevelA[col_c][row_move].collision!=true){
+				this.x_pos += dx
+			}else{
+				this.x_pos = (row_move_c)*50
+			}
+			this.orientation.push('left')
 		}
 	}
 	
 	this.walkToYAxis = function(y){
-		if( Math.abs( y - this.y_pos ) <= this.patrolspeed){
-			this.y_pos += y - this.y_pos
-			this.setOrientationY(y)
+		var dy = y-this.y_pos
+		var dx = this.x_pos
+		dy = Math.abs(dy)<=this.patrolspeed?dy:this.patrolspeed*(dy/Math.abs(dy))
+		var col = Math.floor(this.y_pos/50)
+		var row = Math.floor(this.x_pos/50)
+		var row_move = Math.floor((this.x_pos+dx)/50)
+		var col_move = Math.floor((this.y_pos+dy)/50)
+		var col_c = Math.ceil(this.y_pos/50)
+		var row_c = Math.ceil(this.x_pos/50)
+		var row_move_c = Math.ceil((this.x_pos+dx)/50)
+		var col_move_c = Math.ceil((this.y_pos+dy)/50)
+		if(dy>0){
+			console.log('downward')
+			if(currentLevelA[col_move_c][row].collision!=true
+			&& currentLevelA[col_move_c][row_c].collision!=true){
+				
+				this.y_pos += dy
+				
+			}else{
+				this.y_pos = ((col_move_c-1)*50)
+			}
+			this.orientation.push('down')
 		}else{
-			this.y_pos += ( ( Math.abs(y - this.y_pos ) ) / ( y - this.y_pos ) ) * this.patrolspeed
-			this.setOrientationY(y)
+			console.log(currentLevelA[col_move_c][row].collision!=true
+			&& currentLevelA[col_move_c][row_c].collision!=true)
+			if(currentLevelA[col_move_c][row].collision!=true
+			&& currentLevelA[col_move_c][row_c].collision!=true){
+				this.y_pos += dy
+			}else{
+				this.y_pos = (col_move+1)*50
+			}
+			this.orientation.push('up')
 		}
 	}
 	
@@ -69,12 +122,97 @@ var Defense = function(){
 		return ans
 	}
 	
+	this.findAngle = function(o, a){
+		return Math.atan(o/a)
+	}
+	
+	this.checkIfCollision = function(x, y){
+		var node = currentLevelA[y][x]
+		return node==0?false:node.collision
+	}
+	
+	this.determineMaxChaseSight = function(){
+		var a = playerA[0].x_pos-this.x_pos
+		var flip = Math.abs(a)/a
+		var adjacent = playerA[0].x_pos-this.x_pos*flip
+		var opposite = playerA[0].y_pos-this.y_pos
+		var angle = this.findAngle(opposite, adjacent)
+		var c = Math.cos(angle)
+		var s = Math.sin(angle)
+		var hypotenuse = opposite/s
+		var ch = 0
+		var ca = 0
+		var co = 0
+		var maxR = hypotenuse<=250?hypotenuse:250
+		if(Math.abs(adjacent)>Math.abs(opposite)){
+			var factor = 50/adjacent
+			var unit = {
+				a: 50,
+				o: opposite*factor,
+				h: hypotenuse*factor
+			}
+			while(ch<maxR){
+				ca += unit.a
+				co += unit.o
+				ch += unit.h
+				var y = Math.floor((co+this.y_pos)/50)
+				var x = Math.floor(((ca*flip)+this.x_pos)/50)
+				if(this.checkIfCollision(x, y)){
+					return ch
+				}
+			}
+		}
+		if(Math.abs(adjacent)<Math.abs(opposite)){
+			var factor = 50/opposite
+			var unit = {
+				a: adjacent*factor,
+				o: 50,
+				h: hypotenuse*factor
+			}
+			while(ch<maxR){
+				ca += unit.a
+				co += unit.o
+				ch += unit.h
+				var y = Math.floor((co+this.y_pos)/50)
+				var x = Math.floor(((ca*flip)+this.x_pos)/50)			
+				if(this.checkIfCollision(x, y)){
+					return ch
+				}
+			}
+			if(ch>maxR){
+				return maxR
+			}
+		}
+		return 250
+	}
+	
+	this.WithinChaseSight = function(range){
+		var adjacent = playerA[0].x_pos-this.x_pos
+		var opposite = playerA[0].y_pos-this.y_pos
+		var angle = this.findAngle(opposite, adjacent)
+		var c = Math.cos(angle)
+		var s = Math.sin(angle)
+		var MaxA = c*range
+		var MaxO = s*range
+		return (MaxA>=Math.abs(adjacent))
+	}
+	
 	this.chase = function(){
-		var map = this.getAStarMap()
-		var path = new AStar([Math.floor(this.x_pos/50), Math.floor(this.y_pos/50)], [Math.floor(playerA[0].x_pos/50), Math.floor(playerA[0].y_pos/50)], map)
-		var guide = path.getPath()
-		// console.log(guide)
-		this.walkTo([guide[1][0]*50, guide[1][1]*50])
+		var range = this.determineMaxChaseSight()
+		// console.log('range: '+range)
+		if(this.WithinChaseSight(Math.abs(range))){
+			// console.log('tryingToWalk')
+			this.walkTo([playerA[0].x_pos, playerA[0].y_pos])
+			this.lastFoundPos = [playerA[0].x_pos, playerA[0].y_pos]
+		}else{
+			console.log(this.lastFoundPos)
+			this.walkTo(this.lastFoundPos)
+		}
+		// var map = this.getAStarMap()
+		// var path = new AStar([Math.floor(this.x_pos/50), Math.floor(this.y_pos/50)], [Math.floor(playerA[0].x_pos/50), Math.floor(playerA[0].y_pos/50)], map)
+		// var guide = path.getPath()
+		// // console.log(guide)
+		// this.walkTo([guide[1][0]*50, guide[1][1]*50])
 	}
 	
 	this.withinPatrolSightRight = function(i, range){
@@ -119,9 +257,9 @@ var Defense = function(){
 						}
 					}
 				}
-				console.log(range)
 				if(this.withinPatrolSightRight(i, range)){
 					this.found = true
+					this.lastFoundPos = [playerA[0].x_pos, playerA[0].y_pos] 
 					return true
 				}
 			}
@@ -130,7 +268,7 @@ var Defense = function(){
 			for(var i=-1;i<=1;i++){
 				range = -250
 				for(var c=0; c<5; c++){
-					this.pos = [Math.floor(this.y_pos/50+i),					Math.floor((this.x_pos/50))-c>0?Math.floor((this.x_pos/50))-c:0]
+					this.pos = [Math.floor(this.y_pos/50+i),Math.floor((this.x_pos/50))-c>0?Math.floor((this.x_pos/50))-c:0]
 					if(currentLevelA[this.pos[0]][this.pos[1]]!=0){
 						if(currentLevelA[this.pos[0]][this.pos[1]].content == 'wall'){
 							// console.log('short range')

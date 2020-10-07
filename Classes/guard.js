@@ -8,8 +8,6 @@ var Guard = function(directions){
 	this.constant = function(){
 		this.run()
 	}
-	
-	this.getAStarMap
 }
 
 Guard.prototype = new Defense()
